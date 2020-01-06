@@ -29,10 +29,16 @@ passport.deserializeUser(function(obj, done) {
 // Use Goodreads Strategy
 passport.use(new GoodreadsStrategy({
   consumerKey: process.env['API_KEY'],
-    consumerSecret: process.env['API_SECRETKEY'],
-    callbackURL: "http://localhost:8000/auth/goodreads/callback"
+  consumerSecret: process.env['API_SECRETKEY'],
+  callbackURL: "http://localhost:8000/auth/goodreads/callback"
   },
   function(token, tokenSecret, profile, done) {
-    // WHAT GOES HERE????
+    process.nextTick(function () {
+      // To keep the example simple, the user's Goodreads profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Goodreads account with a user record in your database,
+      // and return that user instead.
+      return done(null, profile);
+    });
   }
 ));
