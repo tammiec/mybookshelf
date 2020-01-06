@@ -7,13 +7,19 @@ const PORT = process.env.PORT || 8000;
 const passport = require('passport');
 const GoodreadsStrategy = require('passport-goodreads').Strategy;
 
+const testRouter =  require('./routes/test');
+
 const app = express();
 
 app.use((bodyParser.urlencoded({extended: true})));
 
+app.use("/test", testRouter);
+
+
 app.listen(PORT, () => {
   console.log(`app running on port ${PORT}`)
 });
+
 
 // OAUTH
 
