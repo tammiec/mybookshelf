@@ -1,12 +1,17 @@
 import React from 'react';
 import { Button } from 'react-native';
+import { connect } from 'react-redux';
 
 import ErrorBoundary from './ErrorBoundary';
+
+const mapStateToProps = state => {
+  return { user: state.user };
+};
 
 export default function Login() {
 
   const handleLogin = () => {
-
+    
   };
 
   return (
