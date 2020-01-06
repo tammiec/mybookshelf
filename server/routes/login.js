@@ -19,15 +19,14 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoodreadsStrategy({
   consumerKey: process.env['API_KEY'],
   consumerSecret: process.env['API_SECRETKEY'],
-  callbackURL: "http://localhost:8000/auth/goodreads/callback"
+  callbackURL: "http://localhost:8000/login/auth/goodreads/callback"
   },
   function(token, tokenSecret, profile, done) {
     process.nextTick(function () {
-      // To keep the example simple, the user's Goodreads profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Goodreads account with a user record in your database,
-      // and return that user instead.
-      return done(null, profile);
+      // Set user as user from Goodreads profile
+      // Best practice would be to have a local user database but for simplicity we will just use this
+      const user = { id: profile.id, name: profile.displayName }
+      return done(null, user);
     });
   }
 ));
@@ -35,14 +34,10 @@ passport.use(new GoodreadsStrategy({
 module.exports = () => {
   
   router.get('/', function(req, res){
-    console.log('req', req.user);
+    console.log('login root page - nothing is happening here!');
   });
   
-  // GET /auth/goodreads
-  //   Use passport.authenticate() as route middleware to authenticate the
-  //   request.  The first step in Goodreads authentication will involve redirecting
-  //   the user to goodreads.com.  After authorization, Goodreads will redirect the user
-  //   back to this application at /auth/goodreads/callback
+  // Redirects to Goodreads for authentication
   router.get('/auth/goodreads',
     passport.authenticate('goodreads'),
     function(req, res){
@@ -50,19 +45,17 @@ module.exports = () => {
       // function will not be called.
     });
   
-  // GET /auth/goodreads/callback
-  //   Use passport.authenticate() as route middleware to authenticate the
-  //   request.  If authentication fails, the user will be redirected back to the
-  //   login page.  Otherwise, the primary route function function will be called,
-  //   which, in this example, will redirect the user to the home page.
+  // If authenticated, user will be logged in, if not, redirected to login page
   router.get('/auth/goodreads/callback', 
     passport.authenticate('goodreads', { failureRedirect: '/login' }),
     function(req, res) {
+      console.log('logged in as', res.req.user);
       res.redirect('/');
     });
   
   router.get('/logout', function(req, res){
     req.logout();
+    console.log('logged out');
     res.redirect('/');
   });
 
@@ -74,10 +67,10 @@ module.exports = () => {
 //   the request is authenticated (typically via a persistent login session),
 //   the request will proceed.  Otherwise, the user will be redirected to the
 //   login page.
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { 
-    return next(); 
-  } else {
-    res.redirect('/login');
-  }
-}
+// function ensureAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) { 
+//     return next(); 
+//   } else {
+//     res.redirect('/login');
+//   }
+// }
