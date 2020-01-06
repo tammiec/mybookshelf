@@ -7,7 +7,6 @@ const session = require('express-session');
 const passport = require('passport');
 const PORT = process.env.PORT || 8000;
 
-const testRouter =  require('./routes/test');
 const loginRouter = require('./routes/login');
 
 const app = express();
@@ -28,7 +27,6 @@ app.get("/", (req, res) => {
   res.send('App is now running!');
 });
 
-app.use("/test", testRouter());
 app.use('/login', loginRouter());
 
 app.listen(PORT, () => {
