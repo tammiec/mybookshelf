@@ -1,8 +1,15 @@
+import { SET_USER } from './constants';
+
 const initialState = {
-  user: null
+  user: {}
 };
 
 function rootReducer(state = initialState, action) {
+
+  if (action.type === SET_USER) {
+    return {...state, user: action.payload};
+  }
+
   return state;
 };
 

@@ -11,6 +11,7 @@ export default function Login() {
     <Button
       title='Log in with Goodreads'
       onPress={handleLogin}
+      accessibilityLabel='Click to log in with Goodreads'
     />
   );
 }
