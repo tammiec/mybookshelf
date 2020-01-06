@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function(req, res, next) {
-  res.send('API is working properly');
-});
-
-module.exports = router;
+module.exports = () => {
+  router.get('/', function(req, res, next) {
+    res.send('API is working properly');
+  });
+  
+  return router;
+};
